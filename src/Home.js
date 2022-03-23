@@ -22,8 +22,8 @@ export default function Home({route, navigation }) {
     itemId = route.params.itemId.data
   }
 
-  const rootRef = firebase.database().ref(`${itemId}`);
-  const animalRef = rootRef.child('/').orderByKey();
+  const rootRef = firebase.database().ref();
+  const animalRef = rootRef.child(`/${itemId}`);
   const [nameIf,setNameIf]     = useState();
   const [bedIDIf,setBedIDIf]   = useState();
   const [IDUserIf,setIDUserIf] = useState();
@@ -34,6 +34,7 @@ export default function Home({route, navigation }) {
   const [solutionIf,setSolutionIf]     = useState();
   useEffect(()=>{
     animalRef.on('value', (child) => {
+      console.log(child, "----" , itemId)
       setIDUserIf(child.val()?.IDUser)
       setNameIf(child.val()?.name)
       setBedIDIf(child.val()?.bedId)
@@ -43,10 +44,7 @@ export default function Home({route, navigation }) {
       setCalibVelo(child.val()?.calibVelo)
       setSolutionIf(child.val()?.solution)
     })
-    return () => {
-      return false;
-    }
-  },[])
+  },[itemId])
 
 
 
